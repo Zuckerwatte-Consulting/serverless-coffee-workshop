@@ -55,6 +55,7 @@
       <OrderSelector />
     </div>
     <IoT />
+    <!-- <Printing /> -->
   </div>
 </template>
 
@@ -67,6 +68,7 @@
 
 import IoT from '@/components/IoT'
 import OrderSelector from '@/components/OrderSelector'
+// import Printing from '@/components/Printing'
 import Authentication from '@/components/Auth'
 
 import { Auth } from 'aws-amplify'
@@ -80,7 +82,8 @@ export default {
   components: {
     IoT,
     OrderSelector,
-    Authenticatio
+    //Printing,
+    Authentication
   },
   data() {
     return {

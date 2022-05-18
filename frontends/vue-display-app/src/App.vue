@@ -1,26 +1,25 @@
-<template>
-  <div v-if="this.$init"><Wrapper /></div>
-  <div v-else><Settings /></div>
-</template>
+<script setup>
+import { Authenticator } from "@aws-amplify/ui-vue";
+import "@aws-amplify/ui-vue/styles.css";
 
-<script>
-/*! Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  SPDX-License-Identifier: MIT-0
- */
+import { Amplify } from "aws-amplify";
+import ComponentWrapper from "./components/ComponentWrapper.vue";
 
-'use strict'
-
-import Wrapper from "@/Wrapper"
-import Settings from "@/components/Settings"
-
-export default {
-  name: "App",
-  components: {
-    Wrapper,
-    Settings
+Amplify.configure({
+  Auth: {
+    region: "us-east-1",
+    identityPoolRegion: "us-east-1",
+    userPoolId: "us-east-1_asI3QEpp7",
+    userPoolWebClientId: "32dhdaaii7hcidrkdhu8ufii9h",
+    mandatorySignIn: false,
   },
-  mounted() {
-    console.log('Mounting App.vue: ', this.$init)
-  }
-}
+});
 </script>
+
+<template>
+  <div>
+    <authenticator :login-mechanisms="['email']">
+      <ComponentWrapper />
+    </authenticator>
+  </div>
+</template>

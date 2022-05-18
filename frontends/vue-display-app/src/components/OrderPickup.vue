@@ -1,23 +1,24 @@
 <template>
-  <va-card :bordered="false" style="height: 100% !important;">
+  <va-card :bordered="false" style="height: 100% !important">
     <va-card-title><h1>Ready</h1></va-card-title>
     <va-card-content>
       <div class="twoColContainer">
         <va-list-item
-          style="width: 49%;"
+          style="width: 49%"
           v-for="(order, index) in orders"
           :key="order.orderId"
         >
           <transition name="fade" v-if="index <= 13">
             <div v-if="order.orderNumber">
               <div class="row">
-                <div class=" md4">
-                  <span style="font-size:52px; padding:10px; color:#08c18a;">{{
-                    order.orderNumber
-                  }}</span>
+                <div class="md4">
+                  <span
+                    style="font-size: 52px; padding: 10px; color: #08c18a"
+                    >{{ order.orderNumber }}</span
+                  >
                 </div>
-                <div class="md4 offset--md4" style="text-align:left">
-                  <strong style="font-size:30px;"
+                <div class="md4 offset--md4" style="text-align: left">
+                  <strong style="font-size: 30px"
                     >{{ order.orderItemName }}
                   </strong>
                   <br />
@@ -38,11 +39,11 @@
  *  SPDX-License-Identifier: MIT-0
  */
 
-'use strict'
+"use strict";
 
-import axios from "axios"
-import Auth from "@aws-amplify/auth"
-const MAX_ORDER_AGE_SECONDS = 600
+import axios from "axios";
+import Auth from "@aws-amplify/auth";
+const MAX_ORDER_AGE_SECONDS = 600;
 
 export default {
   name: "OrderPickup",
@@ -50,34 +51,35 @@ export default {
     return {
       interval: undefined,
       orders: [],
-    }
+    };
   },
   async mounted() {
-    let that = this
-    this.interval = setInterval(() => that.refreshData(), 1000)
+    let that = this;
+    this.interval = setInterval(() => that.refreshData(), 1000);
 
-    this.emitter.on("COMPLETED", function(obj) {
-      console.log("COMPLETED ", obj)
-      obj.completedtime = Date.now()
-      that.orders.push(obj)
-    })
-    await this.loadOrders()
+    this.emitter.on("COMPLETED", function (obj) {
+      console.log("COMPLETED ", obj);
+      obj.completedtime = Date.now();
+      that.orders.push(obj);
+    });
+    await this.loadOrders();
   },
   methods: {
     async loadOrders() {
-      console.log("loadOrders started")
+      console.log("loadOrders started");
 
       // Refresh token
-      const session = await Auth.currentSession()
-      const jwtToken = session.getAccessToken().jwtToken
+      const session = await Auth.currentSession();
+      const jwtToken = session.getAccessToken().jwtToken;
 
       try {
-        const { data } = await axios.get(`${this.$ordersAPIurl}/orders?state=COMPLETED`,
+        const { data } = await axios.get(
+          `${this.$ordersAPIurl}/orders?state=COMPLETED`,
           {
             headers: { Authorization: "Bearer " + jwtToken },
           }
-        )
-        console.log("Pickup orders", data)
+        );
+        console.log("Pickup orders", data);
 
         data.result.map((order) => {
           if (order.drinkOrder) {
@@ -92,41 +94,45 @@ export default {
               completedtime: order.TS,
               state: "COMPLETED",
               age: 0,
-            })
+            });
           }
-        })
+        });
       } catch (err) {
-        console.log("Cannot load orders: ", err)
+        console.log("Cannot load orders: ", err);
       }
     },
     // Convert age in seconds to string with mins/secs
     getMinsSecs(age) {
       try {
         // Minutes and seconds
-        const mins = ~~(age / 60)
-        const secs = ~~age % 60
+        const mins = ~~(age / 60);
+        const secs = ~~age % 60;
 
         // Only return mins if more than a minute
-        let min = ""
-        if (mins > 0) min = mins + "m "
+        let min = "";
+        if (mins > 0) min = mins + "m ";
         // console.log(age, min, secs, min + secs + "s")
-        return min + secs + "s"
+        return min + secs + "s";
       } catch (err) {
-        console.log("getMinsSecs error", err)
-        return ""
+        console.log("getMinsSecs error", err);
+        return "";
       }
     },
     refreshData() {
       // Update ticket age
       for (let i = 0; i < this.orders.length; i++) {
-        this.orders[i].age = parseInt ((Date.now() - this.orders[i].completedtime) / 1000 )
-        this.orders[i].displayAge = this.getMinsSecs(this.orders[i].age)
+        this.orders[i].age = parseInt(
+          (Date.now() - this.orders[i].completedtime) / 1000
+        );
+        this.orders[i].displayAge = this.getMinsSecs(this.orders[i].age);
       }
       // Remove any older orders
-      this.orders = this.orders.filter((order) => (order.age <= MAX_ORDER_AGE_SECONDS))
-    }
-  }
-}
+      this.orders = this.orders.filter(
+        (order) => order.age <= MAX_ORDER_AGE_SECONDS
+      );
+    },
+  },
+};
 </script>
 
 <style>

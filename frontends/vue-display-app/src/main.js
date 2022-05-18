@@ -1,106 +1,46 @@
-/*! Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  SPDX-License-Identifier: MIT-0
- */
-
-'use strict'
-
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
 
 // Theming framework
-import { VuesticPlugin } from 'vuestic-ui'
-import 'vuestic-ui/dist/vuestic-ui.css'
+import { createVuestic } from "vuestic-ui";
+import "vuestic-ui/dist/vuestic-ui.css";
 
 // Global event bus
-import mitt from 'mitt'
-const emitter = mitt()
+import mitt from "mitt";
+const emitter = mitt();
 
 // Amplify imports
-import Amplify from 'aws-amplify'
+import "@aws-amplify/ui-vue/styles.css";
 
 // Phone number handling
-import VueTelInput from 'vue3-tel-input'
-import 'vue3-tel-input/dist/vue3-tel-input.css'
+import VueTelInput from "vue3-tel-input";
+import "vue3-tel-input/dist/vue3-tel-input.css";
 
-const app = createApp(App).use(  VuesticPlugin,{
-  components: {
-    VaChip: {
-      outline: true,
-      rounded: false,
-      size: 'large',
-      color: '#000'
-    },
-    VaCard:{
-      stripe: false,
-      stripeColor:"black",
-      square: false
-    },
-    VaButton:{
-      color:"#08c18a"
-    },
+const app = createApp(App);
 
-    VaButtoGroup:{
-      color:"#08c18a"
-    }
-  },
-}).use(VueTelInput)
-app.config.globalProperties.emitter = emitter
+app.config.globalProperties.emitter = emitter;
+app.config.globalProperties.$appLogo =
+  "https://assets.serverlesscoffee.com/images/serverlesspresso-large.png";
+app.config.globalProperties.$appName = "Validator";
+app.config.globalProperties.$adminApp = true;
 
-/* ===================================================
-                      CONFIGURATION
-    You must add your own values here! See the tutorial
-    in the GitHub repo for more information. @jbesw
-   =================================================== */
+app.config.globalProperties.$userPoolId = "us-east-1_asI3QEpp7";
+app.config.globalProperties.$userPoolWebClientId = "32dhdaaii7hcidrkdhu8ufii9h";
+app.config.globalProperties.$region = "us-east-1";
+app.config.globalProperties.$APIGWEndpointConfigService =
+  "https://czndvyvbud.execute-api.us-east-1.amazonaws.com/Prod/";
+app.config.globalProperties.$APIGWEndpointValidatorService =
+  "https://jo5tcyq4v0.execute-api.us-east-1.amazonaws.com/Prod/";
+app.config.globalProperties.$ConfigTable = "serverlesspresso-config-table";
+app.config.globalProperties.$CoreEventBusName = "Serverlesspresso";
+app.config.globalProperties.$IotEndpointAddress =
+  "arnl8mn7pfxoi.iot.us-east-1.amazonaws.com";
+app.config.globalProperties.$OrderManagerEndpoint =
+  "https://f8fy3bvhme.execute-api.us-east-1.amazonaws.com/Prod/";
+app.config.globalProperties.$UserPoolID = "us-east-1_asI3QEpp7";
 
-app.config.globalProperties.$appLogo = 'https://assets.serverlesscoffee.com/images/serverlesspresso-large.png'
 
-// ** Backend config **
-app.config.globalProperties.$appName = 'Validator'
-app.config.globalProperties.$adminApp = true
 
-// Get global vars from local cache
-if (localStorage.UIstate) {
-  const UIstate = JSON.parse(localStorage.UIstate)
-  console.log('Mounted - Local storage: ', UIstate)
-
-  // Hydrating state from local cache
-  app.config.globalProperties.$APIurl = UIstate.APIurl || ''
-  app.config.globalProperties.$region = UIstate.region || ''
-
-  app.config.globalProperties.$ordersAPIurl = UIstate.ordersAPIurl || ''
-  app.config.globalProperties.$APIconfigURL = UIstate.APIconfigURL || ''
-  app.config.globalProperties.$poolId = UIstate.$poolId || ''
-  app.config.globalProperties.$ConfigEndpoint = UIstate.ConfigEndpoint || '',
-  app.config.globalProperties.$host = UIstate.host || ''
-}
-
-// Are global vars initialized?
-app.config.globalProperties.$init = false
-
-// Only init if settings are provided
-if (app.config.globalProperties.$APIurl === '' ||
-    app.config.globalProperties.$region === '' ||
-    app.config.globalProperties.$ordersAPIurl === '' ||
-    app.config.globalProperties.$c === '' ||
-    app.config.globalProperties.$poolId === '' ||
-    app.config.globalProperties.$ConfigEndpoint === '' ||
-    app.config.globalProperties.$host === '') {
-
-    try {
-      Amplify.configure({
-        Auth: {
-          region: this.$region,
-          identityPoolRegion: this.$region,
-          userPoolId: this.$poolId,
-          userPoolWebClientId: this.$host,
-          mandatorySignIn: false,
-          authenticationFlowType: 'CUSTOM_AUTH',
-        }
-      })
-    } catch (err) {
-      console.error('Error: ', err)
-    }
-    app.config.globalProperties.$init = true
- }
-
-app.mount('#app')
+app.use(VueTelInput);
+app.use(createVuestic());
+app.mount("#app");

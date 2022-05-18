@@ -1,8 +1,17 @@
 <template>
   <div class="base-timer">
-    <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      class="base-timer__svg"
+      viewBox="0 0 100 100"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g class="base-timer__circle">
-        <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+        <circle
+          class="base-timer__path-elapsed"
+          cx="50"
+          cy="50"
+          r="45"
+        ></circle>
         <path
           :stroke-dasharray="circleDasharray"
           class="base-timer__path-remaining"
@@ -25,67 +34,67 @@
  *  SPDX-License-Identifier: MIT-0
  */
 
-'use strict'
-const TIME_LIMIT = 60
+"use strict";
+const TIME_LIMIT = 60;
 
-const FULL_DASH_ARRAY = 283
-const WARNING_THRESHOLD = 10
-const ALERT_THRESHOLD = 5
+const FULL_DASH_ARRAY = 283;
+const WARNING_THRESHOLD = 10;
+const ALERT_THRESHOLD = 5;
 
 const COLOR_CODES = {
   info: {
-    color: "green"
+    color: "green",
   },
   warning: {
     color: "orange",
-    threshold: WARNING_THRESHOLD
+    threshold: WARNING_THRESHOLD,
   },
   alert: {
     color: "red",
-    threshold: ALERT_THRESHOLD
-  }
-}
+    threshold: ALERT_THRESHOLD,
+  },
+};
 
 export default {
   props: ["time"],
   data() {
     return {
-      timePassed: 0
+      timePassed: 0,
     };
   },
 
   computed: {
     circleDasharray() {
-      return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`
+      return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`;
     },
 
     formattedTimeLeft() {
-      let seconds = parseInt(this.timeLeft)
-      return `${seconds}s`
+      let seconds = parseInt(this.timeLeft);
+      return `${seconds}s`;
     },
 
     timeLeft() {
-      return this.time / 1000
+      return this.time / 1000;
     },
 
     timeFraction() {
       const rawTimeFraction = this.timeLeft / TIME_LIMIT;
-      return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction)
+      return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
     },
 
     remainingPathColor() {
-      const { alert, warning, info } = COLOR_CODES
+      const { alert, warning, info } = COLOR_CODES;
 
       if (this.timeLeft <= alert.threshold) {
-        return alert.color
+        return alert.color;
       } else if (this.timeLeft <= warning.threshold) {
-        return warning.color
+        return warning.color;
       } else {
-        return info.color
+        return info.color;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

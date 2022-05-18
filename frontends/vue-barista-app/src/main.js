@@ -58,4 +58,5 @@ app.config.globalProperties.$poolId = '<< ENTER YOUR VALUE >>' // 'YourCognitoId
 //  IoTendpoint: Retrieve this with the CLI command: aws iot describe-endpoint --endpoint-type iot:Data-ATS --region us-west-2
 app.config.globalProperties.$host = '<< ENTER YOUR VALUE >>' // 'YourAwsIoTEndpoint', e.g. 'prefix.iot.us-east-1.amazonaws.com'
 
+
 app.mount('#app')

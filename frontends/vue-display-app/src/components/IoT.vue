@@ -3,12 +3,12 @@
 </template>
 
 <script>
-  /*! Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-  *  SPDX-License-Identifier: MIT-0
-  */
+/*! Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *  SPDX-License-Identifier: MIT-0
+ */
 
-  'use strict'
-  /* eslint-disable */
+"use strict";
+/* eslint-disable */
   const AWS = require('aws-sdk')
   const AWSIoTData = require('aws-iot-device-sdk')
 

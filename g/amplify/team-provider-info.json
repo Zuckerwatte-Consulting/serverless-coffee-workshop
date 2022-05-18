@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-kaffee-dev-214521-authRole",
+      "UnauthRoleArn": "arn:aws:iam::781805980126:role/amplify-kaffee-dev-214521-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::781805980126:role/amplify-kaffee-dev-214521-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-kaffee-dev-214521-deployment",
+      "UnauthRoleName": "amplify-kaffee-dev-214521-unauthRole",
+      "StackName": "amplify-kaffee-dev-214521",
+      "StackId": "arn:aws:cloudformation:us-east-1:781805980126:stack/amplify-kaffee-dev-214521/0efbdc70-d6e3-11ec-af70-0e5a10538aad",
+      "AmplifyAppId": "dngb072165xsk"
+    }
+  }
+}
